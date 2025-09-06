@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Streamlit & logs
+.streamlit/secrets.toml
+logs/
+.history/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local data files (protect attendee info!)
+conference_registrations.xlsx
+*.lock
+*.log
