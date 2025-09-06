@@ -1,0 +1,7 @@
+[theme]
+# Zambia palette (accessible variants)
+primaryColor = "#198A00"          # Green
+backgroundColor = "#F7F9F7"       # Very light green/grey
+secondaryBackgroundColor = "#EAF3EA"  # Soft panel bg
+textColor = "#0F172A"             # Near-black for readability
+font = "sans serif"
