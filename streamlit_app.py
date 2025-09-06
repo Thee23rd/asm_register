@@ -114,7 +114,7 @@ st.session_state.theme_mode = "dark"
 apply_brand("dark")
 
 # Keep the page title without a mode switcher
-st.title("ASM Conference Register")
+# st.title("ASM Conference Register")
 
 
 # ---------- Header ----------
