@@ -17,6 +17,35 @@ from service import (
     register_participant, checkin_bulk, import_block, build_report_bytes
 )
 
+def set_kiosk_mode(enable: bool = True):
+    """Hide Streamlit chrome (menu/header/footer/toolbars) for a clean kiosk UI."""
+    if not enable:
+        return
+    st.set_page_config(
+        page_title="ASM Conference Register",
+        page_icon="🦅",
+        layout="wide",
+        initial_sidebar_state="collapsed",
+        menu_items={},  # empties the hamburger menu if it’s shown
+    )
+    st.markdown(
+        """
+        <style>
+        /* hide global chrome */
+        #MainMenu {visibility: hidden;}
+        header {visibility: hidden;}
+        footer {visibility: hidden;}
+        [data-testid="stToolbar"] {display: none !important;}
+        [data-testid="stDecoration"] {display: none !important;}
+        [data-testid="viewerBadgeLink"] {display: none !important;}
+        .stDeployButton {display: none !important;}
+        /* optional: hide fullscreen buttons on charts/dataframes */
+        button[title="View fullscreen"] {display: none !important;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 # =========================
 # Branding / Theme
 # =========================
@@ -196,10 +225,20 @@ def view_gateway():
 
 def view_attendee_resources():
     hide_chrome()
-    st.title("ASM Conference Materials & Info")
+    left, mid, right = st.columns([1, 2, 2])
+    logo_path = Path("coat of arms.PNG")
+    with left:
+        if logo_path.exists():
+            st.image(str(logo_path), width=80)
+    with mid:
+       st.title("ASM Conference Materials & Info")
+    with right:
+        st.caption(datetime.now().strftime("Today: %B %d, %Y • %H:%M"))
+
+    
 
     st.markdown("""
-    - **Wi-Fi:** ASM-Guest  |  Password: provided at the venue  
+    - **Wi-Fi:** KKIC-WIFI |  Password: **KKIC@2025!**  
     - **Help Desk:** Near the main entrance  
     - **Agenda:** See **Agenda** section below  
     """)
@@ -250,6 +289,14 @@ def view_attendee_resources():
 
 def view_attendee_checkin():
     hide_chrome()
+     # Quick nav: allow attendees to jump to materials immediately
+    top_left, top_right = st.columns([1, 1])
+    with top_left:
+        if st.button("↪  Go to Conference Materials", key="att_top_materials", use_container_width=True):
+            st.session_state.attendee_stage = "resources"
+            st.rerun()
+    with top_right:
+        st.caption("Or search below to confirm/check yourself in.")
 
     # Keep a few small states to survive reruns
     ss = st.session_state

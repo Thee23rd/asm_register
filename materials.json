@@ -1,12 +1,17 @@
 [
   {
     "title": "Official ASM Website",
-    "description": "Visit the official Artisanal and Small-Scale Mining (ASM) website for updates, resources, and news.",
+    "description": "Visit the official Artisanal and Small-Scale Mining (ASM) website.",
     "url": "https://www.mmmd.gov.zm/?page_id=4157g"   
   },
   {
     "title": "Conference Agenda PDF",
     "description": "Full program for the 2025 ASM Conference.",
-    "url": "https://example.com/agenda.pdf"
+    "url": "https://www.mmmd.gov.zm/wp-content/uploads/2025/09/2025-ASM-Conference-Program-1.pdf"
+  },
+   {
+    "title": "Conference live stream",
+    "description": "Watch the conference live on Teams.",
+    "url":"https://teams.microsoft.com/meet/3870059469198?p=cvjP7Kd5NLZn1rfvLi"
   }
 ]
