@@ -306,7 +306,7 @@ def view_attendee_checkin():
 
     df = get_df()
     st.subheader("Attendee check-in / self-registration")
-    st.caption("Search your registration. If not found, you can register yourself. After confirming or registering, continue to the Conference Materials page.")
+    st.caption("Search your registration. If found, check-in and continue to the Conference Materials page.")
 
     # Select day
     cday = st.radio("I'm checking in for:", ["Day 1", "Day 2"], index=0, horizontal=True, key="att_day_radio")
@@ -419,50 +419,50 @@ def view_attendee_checkin():
                     st.session_state.attendee_stage = "resources"
                     st.rerun()
 
-        else:
-            # No matches -> show self-register form
-            st.warning("No matching registration found. Please register yourself below.")
-            with st.form("self_register_form", clear_on_submit=False):
-                n1, n2 = st.columns([1.2, 1])
-                with n1:
-                    name_new = st.text_input("Full Name *", ss.att_q_name, key="att_reg_name")
-                    coop_new = st.text_input("Co-operative/Association/Oganization/Institution (optional)", ss.att_q_coop, key="att_reg_coop")
-                with n2:
-                    dist_new = st.text_input("District *", ss.att_q_dist, key="att_reg_dist")
-                    prov_new = st.text_input("Province *", "", key="att_reg_prov")
-                auto_check = st.checkbox(f"Also check me in for {cday} now", value=True, key="att_reg_auto")
-                do_reg = st.form_submit_button("Register me", type="primary")
+        # else:
+        #     # No matches -> show self-register form
+        #     st.warning("No matching registration found. Please register yourself below.")
+        #     with st.form("self_register_form", clear_on_submit=False):
+        #         n1, n2 = st.columns([1.2, 1])
+        #         with n1:
+        #             name_new = st.text_input("Full Name *", ss.att_q_name, key="att_reg_name")
+        #             coop_new = st.text_input("Co-operative/Association/Oganization/Institution (optional)", ss.att_q_coop, key="att_reg_coop")
+        #         with n2:
+        #             dist_new = st.text_input("District *", ss.att_q_dist, key="att_reg_dist")
+        #             prov_new = st.text_input("Province *", "", key="att_reg_prov")
+        #         auto_check = st.checkbox(f"Also check me in for {cday} now", value=True, key="att_reg_auto")
+        #         do_reg = st.form_submit_button("Register me", type="primary")
 
-            if do_reg:
-                if not name_new or not dist_new or not prov_new:
-                    st.error("Please provide at least Name, District, and Province.")
-                else:
-                    ok, msg = register_participant(name_new.strip(), coop_new.strip(), dist_new.strip(), prov_new.strip())
-                    if not ok:
-                        # Important: show backend reason (e.g., duplicate)
-                        st.warning(msg)
-                    else:
-                        st.success("Registration successful!")
-                        if auto_check:
-                            # Re-load to fetch new NO. and check-in
-                            df2 = get_df()
-                            candidates = df2[
-                                (df2["Name"].astype(str).str.strip().str.lower() == _norm(name_new)) &
-                                (df2["District"].astype(str).str.strip().str.lower() == _norm(dist_new))
-                            ]
-                            if not candidates.empty:
-                                pid = int(candidates["NO."].max())
-                                try:
-                                    upd, alr, nf = checkin_bulk([pid], day_num)
-                                    if upd == 1:
-                                        st.success(f"Checked in for {cday}.")
-                                    elif alr == 1:
-                                        st.info(f"You were already checked in for {cday}.")
-                                except Exception as e:
-                                    st.error(f"Failed to check in: {e}")
-                        # Move to materials
-                        st.session_state.attendee_stage = "resources"
-                        st.rerun()
+        #     if do_reg:
+        #         if not name_new or not dist_new or not prov_new:
+        #             st.error("Please provide at least Name, District, and Province.")
+        #         else:
+        #             ok, msg = register_participant(name_new.strip(), coop_new.strip(), dist_new.strip(), prov_new.strip())
+        #             if not ok:
+        #                 # Important: show backend reason (e.g., duplicate)
+        #                 st.warning(msg)
+        #             else:
+        #                 st.success("Registration successful!")
+        #                 if auto_check:
+        #                     # Re-load to fetch new NO. and check-in
+        #                     df2 = get_df()
+        #                     candidates = df2[
+        #                         (df2["Name"].astype(str).str.strip().str.lower() == _norm(name_new)) &
+        #                         (df2["District"].astype(str).str.strip().str.lower() == _norm(dist_new))
+        #                     ]
+                        #                             if not candidates.empty:
+                        #                                 pid = int(candidates["NO."].max())
+                        #                                 try:
+                        #                                     upd, alr, nf = checkin_bulk([pid], day_num)
+                        #                                     if upd == 1:
+                        #                                         st.success(f"Checked in for {cday}.")
+                        #                                     elif alr == 1:
+                        #                                         st.info(f"You were already checked in for {cday}.")
+                        #                                 except Exception as e:
+                        #                                     st.error(f"Failed to check in: {e}")
+                        #                         # Move to materials
+                        #                         st.session_state.attendee_stage = "resources"
+                        #                         st.rerun()
     else:
         # No search performed yet → gentle prompt
         st.info("Enter your name and click **Find my registration** to continue.")
