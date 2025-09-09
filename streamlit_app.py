@@ -232,8 +232,7 @@ def view_attendee_resources():
             st.image(str(logo_path), width=80)
     with mid:
        st.title("ASM Conference Materials & Info")
-    with right:
-        st.caption(datetime.now().strftime("Today: %B %d, %Y • %H:%M"))
+ 
 
     
 
